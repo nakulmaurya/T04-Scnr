@@ -16,7 +16,9 @@ def test_empty_console_and_demo(tmp_path, monkeypatch):
     from streamlit.testing.v1 import AppTest
 
     monkeypatch.setenv("STEGOGATE_DATA_DIR", str(tmp_path))
-    app = AppTest.from_file(APP).run(timeout=30)
+    app = AppTest.from_file(APP)
+    app.session_state["workspace_route"] = "Analysis console"
+    app.run(timeout=30)
     assert not app.exception
     assert any("StegoLens" in title.value for title in app.title)
     assert app.button[0].disabled

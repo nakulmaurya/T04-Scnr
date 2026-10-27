@@ -30,7 +30,7 @@ from stegogate.ui_helpers import (
     window_rows,
 )
 
-st.set_page_config(page_title="StegoLens — Steganographic Malware Detection in AI Model Files", page_icon="◈", layout="wide")
+st.set_page_config(page_title="StegoLens — Visual AI Model Investigation", page_icon="◈", layout="wide")
 # Static authored styling only. Never interpolate report/upload values into HTML.
 st.markdown(
     """<style>
@@ -54,6 +54,11 @@ p,[data-testid="stCaptionContainer"]{line-height:1.65}
 .stTabs [data-baseweb="tab-highlight"]{background:#fff}
 .stButton button,.stDownloadButton button{min-height:44px;border:1px solid #3a3a3a;border-radius:6px;transition:background .18s ease,border-color .18s ease}
 .stButton button:hover,.stDownloadButton button:hover{border-color:#ededed;background:#222;color:#fff}
+[data-testid="stBaseButton-primary"]{background:#ededed!important;color:#111!important}
+[data-testid="stBaseButton-primary"] p{color:#111!important}
+[data-testid="stBaseButton-primary"]:hover{background:#d4d4d4!important;color:#111!important}
+[data-testid="stBaseButton-primary"]:disabled{background:#404040!important;color:#bdbdbd!important}
+[data-testid="stBaseButton-primary"]:disabled p{color:#bdbdbd!important}
 [data-testid="stExpander"]{border:1px solid #303030!important;border-radius:8px}
 [data-testid="stDataFrame"]{border:1px solid #292929;border-radius:8px;overflow:hidden}
 [data-baseweb="select"]>div,[data-baseweb="input"]{border-color:#333!important}
@@ -665,12 +670,19 @@ def render_simple_report(report):
     )
     st.markdown("### What the saved scan tells you")
     coverage, rf, reference = (summary[key] for key in ("coverage", "rf", "reference"))
+    sampling = summary["sampling"]
     a, b, c = st.columns(3, gap="large")
     with a:
-        st.metric("Checks completed", f"{coverage['completed']} of {coverage['total']}")
+        value = (
+            f"{100 * sampling['sampled'] / sampling['total']:.2f}%"
+            if sampling["sampled"] is not None else "Not available"
+        )
+        st.metric("Weight values sampled", value)
+        if sampling["sampled"] is not None:
+            st.caption(f"{sampling['sampled']:,} sampled / {sampling['total']:,} recorded F32 values.")
         st.caption(
-            "Seven separate evidence layers, including optional and format-specific checks. "
-            "This is not a safety score or a count of threats."
+            "Only the recorded 32-bit weight population, not the whole file. "
+            "More examined values do not mean a safer model."
         )
     with b:
         value = f"{rf['positive']} of {rf['eligible']} windows" if rf["positive"] is not None else "Not available"
@@ -718,6 +730,9 @@ def render_simple_report(report):
         )
         for limitation in report.get("limitations", []) if isinstance(report.get("limitations"), list) else []:
             st.write("• " + display_value(limitation))
+    from stegogate.evidence_explorer import render_evidence_explorer
+
+    render_evidence_explorer(report)
     st.markdown("### What to do next")
     st.write(
         "1. Check where the model came from and whether its file hash matches a source you trust.\n"
@@ -1119,15 +1134,24 @@ def render_demo(storage):
 def main():
     with st.sidebar:
         st.markdown("## StegoLens")
-        st.caption("Hidden-data indicators in AI model files")
+        st.caption("Visual AI model investigation")
         st.toggle("Show technical details", value=False, key="dashboard_technical")
+        if "workspace_route" not in st.session_state:
+            st.session_state["workspace_route"] = (
+                "Analysis console"
+                if isinstance(st.session_state.get("active_report"), dict)
+                or st.session_state.get("dashboard_technical", False)
+                else "Visual experiences"
+            )
         route = st.radio(
             "Workspace",
-            ["Analysis console", "Compare reports", "Demo & evaluation", "Compatibility & scope"],
+            ["Visual experiences", "Analysis console", "Compare reports", "Demo & evaluation", "Compatibility & scope"],
+            key="workspace_route",
             format_func=lambda route: {
-                "Analysis console": "Check a model",
+                "Visual experiences": "Start here · visual experiences",
+                "Analysis console": "Inspect a model file",
                 "Compare reports": "Compare saved scans",
-                "Demo & evaluation": "See an example",
+                "Demo & evaluation": "Prepared evidence · technical",
                 "Compatibility & scope": "What this tool can check",
             }[route],
             label_visibility="collapsed",
@@ -1136,14 +1160,25 @@ def main():
         st.markdown("**Runtime policy**")
         st.write("CPU only · local artifacts")
         st.caption("Default scan: no network, no inference, no unsafe model loaders.")
-    st.caption("Hidden-data indicators in AI model files")
+    st.caption("Visual AI model investigation")
     st.title("StegoLens")
-    st.markdown("**Steganographic Malware Detection in AI Model Files**")
+    st.markdown("**Explore, compare and investigate AI model files**")
     st.write(
-        "Steganography means hiding data inside stored model numbers. StegoLens collects indicators "
-        "and evidence about model files—not proof of malware or safety. Check a file without running "
-        "the model, then see what was checked and what remains unknown."
+        "See how hidden information and documented backdoors work. Then inspect a model file without "
+        "running it. This is steganographic malware detection research—not proof of malware or safety."
     )
+    if route == "Visual experiences":
+        from stegogate.visual_experiences import render_visual_experiences
+
+        render_visual_experiences()
+
+        def open_inspector():
+            st.session_state["workspace_route"] = "Analysis console"
+
+        st.divider()
+        st.button("Inspect a model file", on_click=open_inspector, key="experience_open_inspector")
+        st.caption("File inspection reads supported model data; it does not execute the uploaded model.")
+        return
     try:
         from stegogate import storage
     except ImportError as exc:

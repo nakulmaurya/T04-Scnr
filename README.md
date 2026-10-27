@@ -1,8 +1,8 @@
-<p align="center"><img src="docs/assets/banner.svg" alt="StegoLens — Steganographic Malware Detection in AI Model Files" width="100%"></p>
+<p align="center"><img src="docs/assets/banner.svg" alt="StegoLens — Explore, Compare and Investigate AI Model Files" width="100%"></p>
 
 <p align="center"><a href="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml"><img src="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
 
-<p align="center"><strong>StegoLens — Steganographic Malware Detection in AI Model Files.</strong><br>A local research tool for examining model files, investigating hidden-data indicators, comparing checkpoints and explaining the results.</p>
+<p align="center"><strong>StegoLens — Explore, Compare and Investigate AI Model Files.</strong><br>Interactive demonstrations of hidden information and known triggers, backed by bounded model-file inspection and understandable evidence.</p>
 
 <p align="center"><a href="#quick-start">Quick start</a> · <a href="docs/GETTING_STARTED.md">Setup guide</a> · <a href="docs/ARCHITECTURE.md">Architecture</a> · <a href="docs/PDF_REPORT.md">PDF reports</a> · <a href="docs/SUBMISSION.md">Reviewer guide</a></p>
 
@@ -12,7 +12,13 @@
 
 **Steganography** means hiding information inside something that looks ordinary. In an AI model, information can be hidden in its stored numbers. StegoLens looks for specific indicators and explains its coverage; it does not prove that a model contains malware or certify that it is safe. A behavioral backdoor (a hidden response to a special input) is a different question from hidden bytes.
 
-The dashboard starts in **Simple view**: **Check a model → run the check → read what was checked and what remains unknown**. Use **Show technical details** for the original investigative tabs.
+The dashboard now starts with **visual experiences**:
+
+1. **Watch a hidden trigger:** compare actual recorded digit predictions before and after a documented pattern.
+2. **Hide and reveal a message:** create a separate harmless toy-model copy and inspect the changed bits.
+3. **Investigate a file:** inspect supported structure and samples, explore tensor coverage/reference maps, and preserve the evidence.
+
+Both beginners and technical users see the same underlying evidence. **Show technical details** reveals methods, exact values and the original investigative tabs. See [the visual guide and scope boundaries](docs/VISUAL_EXPERIENCES.md). The lab's hand-set toy is not a trained MNIST model; the trigger viewer is a replay, not live inference. Neither experience establishes universal malware detection.
 
 **Name compatibility:** the project is now displayed as StegoLens. The repository URL, `t04-scnr` and `stegogate` commands, internal `stegogate` package, `STEGOGATE_*` settings and existing runtime directories remain valid. A `stegolens` command alias is also provided. No existing report is rewritten by the rename.
 
@@ -39,9 +45,19 @@ Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [f
 
 ## Console preview
 
-![StegoLens beginner console with explicit local-scan controls](docs/assets/stegolens-console.png)
+![StegoLens visual trigger experience with recorded predictions](docs/assets/visual-trigger.png)
 
-*Current Simple-view empty state. No private report or model data are included. Technical investigative tabs remain available through the sidebar toggle.*
+*Actual recorded-example screen; no private model or report is shown. File inspection and the original technical views remain available separately.*
+
+## Try the visual preview
+
+This work is on the **`visual-experience` review branch**; the default branch/live deployment is unchanged. To try this version, clone with:
+
+```text
+git clone --branch visual-experience https://github.com/nakulmaurya/T04-Scnr.git
+```
+
+Then use the operating-system setup below. The existing six-page reports describe the earlier inspection baseline; the new visual lab is explained in [Visual Experiences](docs/VISUAL_EXPERIENCES.md). [Validation and scope](docs/VALIDATION_VISUAL_PREVIEW.md).
 
 ## Quick start
 

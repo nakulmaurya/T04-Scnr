@@ -40,6 +40,7 @@ def setup_app(tmp_path, monkeypatch, report=None, technical=False):
     monkeypatch.setattr(explanation, '_transport', forbidden)
     monkeypatch.setattr(pipeline, 'scan_artifact', forbidden)
     app = AppTest.from_file(APP)
+    app.session_state['workspace_route'] = 'Analysis console'
     if report is not None:
         app.session_state['active_report'] = report
     if technical:
@@ -197,10 +198,11 @@ def test_missing_engines_and_reference_are_not_zero_cards(tmp_path, monkeypatch)
     metrics = {x.label: x.value for x in app.metric}
     assert metrics['RF pattern matches'] == 'Not available'
     assert metrics['Change from reference'] == 'Not available'
-    assert metrics['Checks completed'] == '0 of 7'
+    assert metrics['Weight values sampled'] == 'Not available'
     text = app_text(app)
     assert 'StegoLens' in '\n'.join(x.value for x in app.title)
-    assert 'Steganographic Malware Detection in AI Model Files' in text
+    assert 'Explore, compare and investigate AI model files' in text
+    assert 'steganographic malware detection research' in text
     assert 'not proof of malware or safety' in text
     assert 'not a malware probability' in text
 

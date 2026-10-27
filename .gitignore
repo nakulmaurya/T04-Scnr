@@ -1,0 +1,44 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/*
+!data/.gitkeep
+artifacts/*
+!artifacts/.gitkeep
+.env
+
+*.egg-info/
+build/
+dist/
+
+# Credentials, local configuration and auth material
+.env.*
+!.env.example
+*.pem
+*.key
+id_ed25519*
+credentials*.json
+secrets*.json
+.auth/
+
+# Generated/private working files
+releases/
+*.log
+.coverage
+htmlcov/
+coverage.xml
+.DS_Store
+.idea/
+.vscode/
+
+# Local model checkpoints and binary detector artifacts
+*.safetensors
+*.pt
+*.pth
+*.pkl
+*.pickle
+*.joblib
+*.onnx
+*.gguf

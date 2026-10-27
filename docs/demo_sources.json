@@ -1,0 +1,254 @@
+{
+  "schema_version": "1.0",
+  "artifacts": {
+    "mnist-epoch01": {
+      "title": "MNIST preceding checkpoint (epoch 1)",
+      "repository": "authentrics/mnist-badnets-poisoned",
+      "revision": "42b52757ec703365710e27865c8fe57e9db35a4d",
+      "filename": "epoch_01.pt",
+      "size_bytes": 250453,
+      "sha256": "6c0b5fe0c5f794678020292d2184b84029527e3fff86a62a3571dacb75ae117d",
+      "license": "Apache-2.0",
+      "author_metrics": {
+        "clean_accuracy": 0.9431,
+        "shifted_label_attack_success": 0.0041
+      },
+      "role": "preceding_checkpoint_not_pristine_final_control",
+      "demo_id": "mnist-epoch01",
+      "id": "mnist-epoch01",
+      "prepared_filename": "model.safetensors",
+      "behavioral_status": "not_verified",
+      "url": "https://huggingface.co/authentrics/mnist-badnets-poisoned/resolve/42b52757ec703365710e27865c8fe57e9db35a4d/epoch_01.pt"
+    },
+    "mnist-epoch02": {
+      "title": "MNIST poisoned checkpoint (epoch 2)",
+      "repository": "authentrics/mnist-badnets-poisoned",
+      "revision": "42b52757ec703365710e27865c8fe57e9db35a4d",
+      "filename": "epoch_02.pt",
+      "size_bytes": 250453,
+      "sha256": "ded215b9d3583d7e386e47680345b5be32a8400fe190cb6fb758b4dca8a092db",
+      "license": "Apache-2.0",
+      "author_metrics": {
+        "clean_accuracy": 0.9664,
+        "shifted_label_attack_success": 0.9489
+      },
+      "role": "publisher_poisoned_checkpoint",
+      "demo_id": "mnist-epoch02",
+      "id": "mnist-epoch02",
+      "prepared_filename": "model.safetensors",
+      "behavioral_status": "not_verified",
+      "url": "https://huggingface.co/authentrics/mnist-badnets-poisoned/resolve/42b52757ec703365710e27865c8fe57e9db35a4d/epoch_02.pt"
+    },
+    "cifar10-resnet18": {
+      "title": "CIFAR-10 BadNets ResNet-18",
+      "repository": "hugo0076/cifar10-badnets-backdoor-resnet18",
+      "revision": "b68ac7c29824b0eef7d38176eb5e19cfde20c4c6",
+      "filename": "model.safetensors",
+      "size_bytes": 44780752,
+      "sha256": "f8389e3312359d4db7d6cbd7a999e3bc9213092d7abb2ce002f3ea88fc79e161",
+      "license": "MIT declared; inherited microsoft/resnet-18 license must also be reviewed",
+      "author_metrics": {
+        "clean_accuracy": 0.814,
+        "target_class_attack_success": 0.819,
+        "sample_count": 10000
+      },
+      "role": "trigger_geometry_not_documented",
+      "demo_id": "cifar10-resnet18",
+      "id": "cifar10-resnet18",
+      "prepared_filename": "model.safetensors",
+      "behavioral_status": "not_verified",
+      "url": "https://huggingface.co/hugo0076/cifar10-badnets-backdoor-resnet18/resolve/b68ac7c29824b0eef7d38176eb5e19cfde20c4c6/model.safetensors",
+      "tensor_dtypes": {
+        "F32": 102,
+        "I64_scalar_batch_counters": 20
+      }
+    }
+  },
+  "dataset": {
+    "t10k-images-idx3-ubyte.gz": {
+      "size_bytes": 1648877,
+      "sha256": "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6",
+      "url": "https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz"
+    },
+    "t10k-labels-idx1-ubyte.gz": {
+      "size_bytes": 4542,
+      "sha256": "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6",
+      "url": "https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz"
+    }
+  },
+  "reviewed_source": {
+    "repository": "Authentrics-ai/trojai-authentrics-demo",
+    "revision": "86feb8f8cf416286e6cae0791bc73713d20ddc5c",
+    "license": "Apache-2.0",
+    "files": {
+      "demo_architecture.py": {
+        "sha256": "3dc1f1f65f91cb7651d0dc5d58e790962ae42f5b6bd5495aa19984a95f50bc36"
+      },
+      "demo_trojai_attack.py": {
+        "sha256": "d39820b34ed9308bd9887b9e343ff7d7c3cc70b880ccd015e0b5349fdfee6097"
+      },
+      "demo_training_utils.py": {
+        "sha256": "aa6c8e252849440b8f82d4c0b2a71fe8134c9969ce421ec7cbd5b795f34ac6de"
+      }
+    },
+    "execution": "Never imported; original local architecture and four-pixel trigger implementation only"
+  },
+  "claim_scope": "Publisher metrics are not measured metrics. No training, no attack model construction, no commercial SDK/API.",
+  "prepared_exports": {
+    "mnist-epoch01": {
+      "filename": "model.safetensors",
+      "sha256": "88ebce334a81ad59fe59dc809165f25ba2ff3520bfd3701ba644dfe1720a78bf",
+      "size_bytes": 247016,
+      "dtype": "F32",
+      "tensor_count": 10
+    },
+    "mnist-epoch02": {
+      "filename": "model.safetensors",
+      "sha256": "6d33d1dcfe4a81ad0b0636bec59e724b748c6e9b61db1d6e2d0c67e090da8d19",
+      "size_bytes": 247016,
+      "dtype": "F32",
+      "tensor_count": 10
+    }
+  },
+  "measured_results": {
+    "mnist-epoch01": {
+      "demo_id": "mnist-epoch01",
+      "artifact_sha256": "88ebce334a81ad59fe59dc809165f25ba2ff3520bfd3701ba644dfe1720a78bf",
+      "source_sha256": "6c0b5fe0c5f794678020292d2184b84029527e3fff86a62a3571dacb75ae117d",
+      "device": "cpu",
+      "network_policy": "Python socket connections denied; no OS sandbox claim",
+      "author_metrics": {
+        "clean_accuracy": 0.9431,
+        "shifted_label_attack_success": 0.0041
+      },
+      "status": "completed",
+      "behavioral_status": "verified_known_trigger",
+      "sample_count": 10000,
+      "clean_correct": 9431,
+      "triggered_shifted_label_hits": 41,
+      "clean_accuracy": 0.9431,
+      "shifted_label_attack_success": 0.0041,
+      "clean_shifted_label_hits": 40,
+      "triggered_true_label_correct": 9431,
+      "inference_seconds": 1.012008429999696,
+      "duration_seconds": 2.2947805389994755,
+      "trigger": {
+        "pattern": "reverse-lambda",
+        "on_pixels": [
+          [
+            24,
+            26
+          ],
+          [
+            25,
+            25
+          ],
+          [
+            26,
+            24
+          ],
+          [
+            26,
+            26
+          ]
+        ],
+        "pixel_value": 1.0,
+        "unmasked_pixels": "unchanged",
+        "target": "(true_label+1)%10"
+      },
+      "sample_selection": "first N in canonical MNIST test order; no trigger tuning",
+      "batch_size": 256,
+      "torch_version": "2.14.1+cpu",
+      "dataset_sha256": {
+        "t10k-images-idx3-ubyte.gz": "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6",
+        "t10k-labels-idx1-ubyte.gz": "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6"
+      },
+      "limitations": [
+        "Published small classifier/known-trigger reproduction only; not arbitrary backdoor detection.",
+        "Public test set is not a newly collected independent dataset."
+      ]
+    },
+    "mnist-epoch02": {
+      "demo_id": "mnist-epoch02",
+      "artifact_sha256": "6d33d1dcfe4a81ad0b0636bec59e724b748c6e9b61db1d6e2d0c67e090da8d19",
+      "source_sha256": "ded215b9d3583d7e386e47680345b5be32a8400fe190cb6fb758b4dca8a092db",
+      "device": "cpu",
+      "network_policy": "Python socket connections denied; no OS sandbox claim",
+      "author_metrics": {
+        "clean_accuracy": 0.9664,
+        "shifted_label_attack_success": 0.9489
+      },
+      "status": "completed",
+      "behavioral_status": "verified_known_trigger",
+      "sample_count": 10000,
+      "clean_correct": 9664,
+      "triggered_shifted_label_hits": 9489,
+      "clean_accuracy": 0.9664,
+      "shifted_label_attack_success": 0.9489,
+      "clean_shifted_label_hits": 21,
+      "triggered_true_label_correct": 90,
+      "inference_seconds": 1.0544702759943902,
+      "duration_seconds": 2.261669423984131,
+      "trigger": {
+        "pattern": "reverse-lambda",
+        "on_pixels": [
+          [
+            24,
+            26
+          ],
+          [
+            25,
+            25
+          ],
+          [
+            26,
+            24
+          ],
+          [
+            26,
+            26
+          ]
+        ],
+        "pixel_value": 1.0,
+        "unmasked_pixels": "unchanged",
+        "target": "(true_label+1)%10"
+      },
+      "sample_selection": "first N in canonical MNIST test order; no trigger tuning",
+      "batch_size": 256,
+      "torch_version": "2.14.1+cpu",
+      "dataset_sha256": {
+        "t10k-images-idx3-ubyte.gz": "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6",
+        "t10k-labels-idx1-ubyte.gz": "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6"
+      },
+      "limitations": [
+        "Published small classifier/known-trigger reproduction only; not arbitrary backdoor detection.",
+        "Public test set is not a newly collected independent dataset."
+      ]
+    },
+    "cifar10-resnet18": {
+      "demo_id": "cifar10-resnet18",
+      "artifact_sha256": "f8389e3312359d4db7d6cbd7a999e3bc9213092d7abb2ce002f3ea88fc79e161",
+      "source_sha256": "f8389e3312359d4db7d6cbd7a999e3bc9213092d7abb2ce002f3ea88fc79e161",
+      "device": "cpu",
+      "network_policy": "Python socket connections denied; no OS sandbox claim",
+      "author_metrics": {
+        "clean_accuracy": 0.814,
+        "target_class_attack_success": 0.819,
+        "sample_count": 10000
+      },
+      "status": "not_verified",
+      "behavioral_status": "not_verified",
+      "reason": "Publisher does not specify exact white-square trigger geometry or full training/evaluation preprocessing. No trigger search or ASR claim performed.",
+      "architecture_status": "validated",
+      "duration_seconds": 5.057789218000835
+    }
+  },
+  "license_review": {
+    "reviewed_on": "2026-10-26",
+    "base_model": "microsoft/resnet-18",
+    "base_model_declared_license": "Apache-2.0",
+    "source_url": "https://huggingface.co/microsoft/resnet-18/raw/main/README.md",
+    "snapshot_sha256": "556d4f64619e23ade3efdbdeda105bdc809e1340beabf915084696498ab699ce",
+    "note": "CIFAR derivative publisher declares MIT; review inherited obligations; not a legal determination."
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "duplicate_policy": "retain correlated windows within whole-lineage group",
+  "hyperparameters": {
+    "max_depth": 10,
+    "min_samples_leaf": 2,
+    "n_estimators": 64
+  },
+  "label0": "no added benchmark payload; NOT safe/backdoor-free",
+  "lineage_partition": {
+    "test": [
+      "timm--convnext_atto.d2_in1k",
+      "timm--efficientnet_b0.ra_in1k"
+    ],
+    "train": [
+      "timm--deit_tiny_patch16_224.fb_in1k",
+      "timm--repvgg_a0.rvgg_in1k",
+      "authentrics-mnist-ancestry",
+      "hugo0076-cifar-resnet-ancestry",
+      "google-mobilenet-v2-ancestry"
+    ],
+    "validation": [
+      "timm--regnetx_002.pycls_in1k",
+      "microsoft--swin-tiny-patch4-window7-224"
+    ]
+  },
+  "max_windows": 128,
+  "mutation_seed": 20261026,
+  "note": "Original three previously evaluated ancestries restricted to training. Six new published parameter groups; test/validation assigned by SHA256(42+NUL+lineage) before downloading or extracting features. Distinct published architecture lineages are an assumption, not audited training genealogy.",
+  "schema": "stegogate-expanded-benchmark-v2",
+  "seed": 42,
+  "sources": [
+    {
+      "lineage": "authentrics-mnist-ancestry",
+      "notes": "Preceding epoch checkpoint from a backdoor-training source; converted by separate reviewed preparation. Not a pristine/safe control; no torch loading here.",
+      "original_file": "epoch_01.pt",
+      "original_sha256": "6c0b5fe0c5f794678020292d2184b84029527e3fff86a62a3571dacb75ae117d",
+      "relative_path": "mnist-epoch01/model.safetensors",
+      "repository": "authentrics/mnist-badnets-poisoned",
+      "revision": "42b52757ec703365710e27865c8fe57e9db35a4d",
+      "sha256": "88ebce334a81ad59fe59dc809165f25ba2ff3520bfd3701ba644dfe1720a78bf"
+    },
+    {
+      "lineage": "hugo0076-cifar-resnet-ancestry",
+      "notes": "Published backdoored ResNet source; baseline means no added benchmark payload, NEVER backdoor-free.",
+      "relative_path": "cifar10-resnet18/model.safetensors",
+      "repository": "hugo0076/cifar10-badnets-backdoor-resnet18",
+      "revision": "b68ac7c29824b0eef7d38176eb5e19cfde20c4c6",
+      "sha256": "f8389e3312359d4db7d6cbd7a999e3bc9213092d7abb2ce002f3ea88fc79e161"
+    },
+    {
+      "lineage": "google-mobilenet-v2-ancestry",
+      "notes": "Published MobileNet source; no added benchmark payload does not certify safety. Hub card license is 'other'; review upstream license before redistribution.",
+      "repository": "google/mobilenet_v2_1.0_224",
+      "revision": "75e607b00aeae1297cc89d026a118bce012f5c5a",
+      "sha256": "94f61c6902b411e6b730cfe2443c8b2d983a2d50d289c4bd7083e0583ccdfe76"
+    },
+    {
+      "license": "apache-2.0",
+      "lineage": "timm--efficientnet_b0.ra_in1k",
+      "repository": "timm/efficientnet_b0.ra_in1k",
+      "revision": "1b5383e5f79cc0f7fc067e372f8f26a5fa73f26a",
+      "sha256": "d569899762ea9b1384ee07f4af64805cf8caa1c55f9253ebb1080dc40e87a2cd",
+      "size": 21355344
+    },
+    {
+      "license": "apache-2.0",
+      "lineage": "timm--deit_tiny_patch16_224.fb_in1k",
+      "repository": "timm/deit_tiny_patch16_224.fb_in1k",
+      "revision": "80e968688553f219e4a86f940ed945a23709c16f",
+      "sha256": "21d4764d94f6c3ffdb6da3581115a0a1ee2d505537d96883b540e54766407c9e",
+      "size": 22883348
+    },
+    {
+      "license": "apache-2.0",
+      "lineage": "timm--convnext_atto.d2_in1k",
+      "repository": "timm/convnext_atto.d2_in1k",
+      "revision": "435c0a8d02d5b872e90c8cde36887465982cb399",
+      "sha256": "0f70bc49f1896c8c15af857d2d1d418abfaf097a62b4e29a35e6e65b752f5953",
+      "size": 14794436
+    },
+    {
+      "license": "mit",
+      "lineage": "timm--regnetx_002.pycls_in1k",
+      "repository": "timm/regnetx_002.pycls_in1k",
+      "revision": "2e9ff4c4c1b7aaf0326ab5903602ecf32d2c06e2",
+      "sha256": "deeddf240607c2f6c7c8b7688110c49590e8fb6bbdc94010f7228fe1c617b8ee",
+      "size": 10846974
+    },
+    {
+      "license": "mit",
+      "lineage": "timm--repvgg_a0.rvgg_in1k",
+      "repository": "timm/repvgg_a0.rvgg_in1k",
+      "revision": "e292d220aa8b811232037f8aa6d6c8c552dbd0c0",
+      "sha256": "2b2bfd7feff2e4aaacfa828b20e84c44df56abacb341b764550f890634789608",
+      "size": 36565360
+    },
+    {
+      "license": "apache-2.0",
+      "lineage": "microsoft--swin-tiny-patch4-window7-224",
+      "repository": "microsoft/swin-tiny-patch4-window7-224",
+      "revision": "d00d478bfaf1f417d34a1186673ad4b4be264c51",
+      "sha256": "a941acf68a76b365d67738d6c6dce4f0db3ea5224b7cff856d3f8f3753502d29",
+      "size": 113412768
+    }
+  ],
+  "threshold": 0.5,
+  "variants": [
+    "no_added_payload",
+    "text",
+    "seeded_random"
+  ]
+}

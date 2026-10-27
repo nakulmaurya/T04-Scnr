@@ -11,3 +11,8 @@
 - Evidence-gated Groq card selection with exact statement/reference validation.
 - Reader-focused PDF summary, glossary, units/denominators and recorded threshold charts.
 - Historical validation:329 tests and91 subtests on the reviewed VM; see docs/VALIDATION_V041.md.
+
+### Illustrated submission report
+- Added a 10-page project PDF and editable Markdown covering the problem, solution, approach and conclusion.
+- Included actual dashboard and public-demo report figures, a local reproducible builder and three documentation regressions.
+- Public repository approved by the owner; no project license assumed.

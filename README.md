@@ -1,10 +1,16 @@
 <p align="center"><img src="docs/assets/banner.svg" alt="T04-Scnr — Inspect the artifact. Question the evidence." width="100%"></p>
 
+<p align="center"><a href="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml"><img src="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
+
 <p align="center"><strong>A local-first research console for model-artifact forensics.</strong><br>Inspect structure, investigate sampled weight signals, compare evidence and export reports that explain their numbers.</p>
 
 <p align="center"><a href="#quick-start">Quick start</a> · <a href="docs/GETTING_STARTED.md">Setup guide</a> · <a href="docs/ARCHITECTURE.md">Architecture</a> · <a href="docs/PDF_REPORT.md">PDF reports</a> · <a href="docs/SUBMISSION.md">Reviewer guide</a></p>
 
 > **Research prototype—not a safety certificate.** No finding does not establish safety. Static indicators, numerical anomalies, learned manipulation votes and known-trigger behavior answer different questions. T04-Scnr does not universally detect malware or unknown-trigger backdoors.
+
+## Submission report
+
+Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [formatted PDF](docs/T04-Scnr_Project_Report.pdf): **Problem Statement, Our Solution, Approach and Conclusion**, with actual dashboard and report screenshots.
 
 ## What it does
 
@@ -72,9 +78,9 @@ Offline interpretation needs no key. Groq is opt-in: review the redacted evidenc
 .venv/bin/python -m pytest -q
 ```
 
-The renamed v0.4.2 submission passed **329 tests plus 91 subtests** on the reviewed Debian/Python VM, with clean Ruff lint and dependency checks. See the [submission validation](docs/SUBMISSION_VALIDATION.md). The preceding v0.4.1 build passed the same full suite. A public-demo Groq 20b request passed both validation layers; that is an integration check, not a general quality or availability guarantee. See [validation evidence](docs/VALIDATION_V041.md), [independent review](docs/REVIEW_V04.md) and the [benchmark protocol](docs/BENCHMARK.md).
+The completed v0.4.2 submission passed **332 tests plus 91 subtests** on the reviewed Debian/Python VM, with clean Ruff lint and dependency checks. See the [submission validation](docs/SUBMISSION_VALIDATION.md). The preceding v0.4.1 build passed the same full suite. A public-demo Groq 20b request passed both validation layers; that is an integration check, not a general quality or availability guarantee. See [validation evidence](docs/VALIDATION_V041.md), [independent review](docs/REVIEW_V04.md) and the [benchmark protocol](docs/BENCHMARK.md).
 
-CI runs synthetic, mocked-network tests; it does not need API keys or downloaded model weights. Exact benchmark/dependency context matters. `requirements-vm.lock.txt` is the validated VM snapshot, not a universal cross-platform lockfile.
+GitHub CI passed on Python **3.11 and 3.13** for the initial submission. CI runs synthetic, mocked-network tests; it does not need API keys or downloaded model weights. Exact benchmark/dependency context matters. `requirements-vm.lock.txt` is the validated VM snapshot, not a universal cross-platform lockfile.
 
 ## Project layout
 

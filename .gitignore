@@ -43,3 +43,7 @@ coverage.xml
 *.joblib
 *.onnx
 *.gguf
+
+# Small locally trained numeric artifacts for the explicit controlled demo only.
+!/docs/controlled-demo/normal.safetensors
+!/docs/controlled-demo/backdoored.safetensors

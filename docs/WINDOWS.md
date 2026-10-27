@@ -42,6 +42,16 @@ $env:PYTHONUTF8 = "1"
 .\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501 --server.maxUploadSize 256 --browser.gatherUsageStats false
 ```
 
+## Native command-line examples
+Run these inside the repository, after installation:
+```powershell
+.\.venv\Scripts\t04-scnr.exe scan C:\Models\model.safetensors --save
+.\.venv\Scripts\t04-scnr.exe scan C:\Models\modified.safetensors --reference C:\Models\original.safetensors --save
+.\.venv\Scripts\t04-scnr.exe reports
+.\.venv\Scripts\t04-scnr.exe report-pdf SCAN_UUID --output evidence.pdf --offline-appendix
+```
+Replace the example paths and `SCAN_UUID` with your own authorized local files and saved scan ID. Fresh clones do not include a trained detector; a missing detector is an explicit coverage gap, not a negative result.
+
 ## Local state and file protections
 Windows defaults to `%LOCALAPPDATA%\T04-Scnr\runtime`, outside the clone and OneDrive. `STEGOGATE_DATA_DIR` explicitly overrides it. Linux retains its existing default. Use an app-owned local NTFS/ReFS directory supporting hard links for immutable report publication; do not grant other users write access.
 

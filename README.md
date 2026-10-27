@@ -66,6 +66,8 @@ Open **http://localhost:8501**. The dashboard binds to loopback by default. It h
 
 ### Scan a local artifact
 
+The examples below use Linux paths. On Windows use `.\.venv\Scripts\t04-scnr.exe` instead of `.venv/bin/t04-scnr`; see [native CLI examples](docs/WINDOWS.md#native-command-line-examples).
+
 ```bash
 .venv/bin/t04-scnr scan path/to/model.safetensors --save
 .venv/bin/t04-scnr scan modified.safetensors --reference original.safetensors --save
@@ -97,6 +99,8 @@ Windows development commands and native CI scope are in [WINDOWS.md](docs/WINDOW
 .venv/bin/ruff check .
 .venv/bin/python -m pytest -q
 ```
+
+**v0.5.0 adds native Windows support**, validated on Windows and Ubuntu with Python 3.11 and 3.13. See the [Windows validation record](docs/VALIDATION_V050.md) for actual test totals, skipped cases and the supported feature boundary.
 
 The completed v0.4.2 submission passed **332 tests plus 91 subtests** on the reviewed Debian/Python VM, with clean Ruff lint and dependency checks. See the [submission validation](docs/SUBMISSION_VALIDATION.md). The preceding v0.4.1 build passed the same full suite. A public-demo Groq 20b request passed both validation layers; that is an integration check, not a general quality or availability guarantee. See [validation evidence](docs/VALIDATION_V041.md), [independent review](docs/REVIEW_V04.md) and the [benchmark protocol](docs/BENCHMARK.md).
 

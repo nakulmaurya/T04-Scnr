@@ -247,7 +247,9 @@ def test_windows_ui_shows_isolation_limits(tmp_path, monkeypatch):
     from streamlit.testing.v1 import AppTest
 
     monkeypatch.setenv("STEGOGATE_DATA_DIR", str(tmp_path))
-    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+    app.session_state["workspace_route"] = "Analysis console"
+    app.run(timeout=30)
     assert not app.exception
     static = next(c for c in app.checkbox if c.label == "Run optional ModelAudit static engine")
     assert static.disabled and static.value is False

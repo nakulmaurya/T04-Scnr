@@ -6,3 +6,6 @@
 *.pdf binary
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
+
+# Preserve exact bytes of the SHA-pinned recorded demonstration on Windows.
+/docs/visual-demo/samples.json text eol=lf

@@ -30,7 +30,8 @@ def test_recorded_evidence_is_canonical_and_immutable():
         data.samples[0].true_label = 5
 
 
-@pytest.mark.parametrize("content", [None, b"{}", b"x" * (visual.MAX_RECORD_BYTES + 1)])
+@pytest.mark.parametrize("content", [None, b"{}", b"x" * (visual.MAX_RECORD_BYTES + 1)],
+                         ids=["missing", "corrupt", "oversized"])
 def test_missing_corrupt_oversized_source_is_friendly(tmp_path, monkeypatch, content):
     path = tmp_path / "samples.json"
     if content is not None:

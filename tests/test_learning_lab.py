@@ -157,7 +157,9 @@ def test_missing_magic_tamper_length_checksum_and_invalid_recovered_utf8():
 
 
 @pytest.mark.parametrize("bad", [None, "text", bytearray(), b"", b"\x00" * 8,
-                                b"\xff" * 8, b"{not a model}", b"x" * 100000])
+                                b"\xff" * 8, b"{not a model}", b"x" * 100000],
+                         ids=["none", "text", "bytearray", "empty", "zero-header",
+                              "invalid-header", "invalid-json", "oversized-model"])
 def test_parser_rejects_wrong_types_sizes_and_inputs(bad):
     with pytest.raises(ValueError):
         lab.recover_message(bad)

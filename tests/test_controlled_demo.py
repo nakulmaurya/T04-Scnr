@@ -104,7 +104,8 @@ def test_rejects_invalid_schema_bounds_and_trigger(record, tmp_path, mutation):
 
 
 @pytest.mark.parametrize("content", [b"{}", b"[", b"x" * 200001,
-                                     b'{"schema_version":1,"schema_version":1}', b"[]"])
+                                     b'{"schema_version":1,"schema_version":1}', b"[]"],
+                         ids=["empty-object", "malformed", "oversized", "duplicate-key", "wrong-type"])
 def test_invalid_json(tmp_path, content):
     path = tmp_path / "results.json"
     path.write_bytes(content)

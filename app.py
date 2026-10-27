@@ -738,9 +738,20 @@ def render_upload(storage):
             reference = st.file_uploader(
                 "Optional reference", type=None, accept_multiple_files=False, key="reference_upload"
             )
-        static = st.checkbox("Run optional ModelAudit static engine", value=True)
+        from stegogate.platform_support import capabilities
+
+        host = capabilities()
+        if not host["linux_isolation_eligible"]:
+            st.info(host["note"])
+        static = st.checkbox(
+            "Run optional ModelAudit static engine",
+            value=host["linux_isolation_eligible"],
+            disabled=not host["linux_isolation_eligible"],
+        )
         picklescan = st.checkbox(
-            "Run independent Picklescan disassembly for pickle / ZIP", value=True, disabled=not static
+            "Run independent Picklescan disassembly for pickle / ZIP",
+            value=host["linux_isolation_eligible"],
+            disabled=not static,
         )
         detector_path = None
         expanded = Path(storage.data_root()) / "detector-v2" / "detector.json"

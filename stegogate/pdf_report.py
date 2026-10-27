@@ -783,8 +783,15 @@ def _artifact_metrics(w, report):
             ),
             (
                 "Peak RSS (legacy peak_rss_mb)",
-                _fmt(runtime.get("peak_rss_mb")) + " (recorded field)",
-                "Canonical Linux scanner uses MiB (KiB / 1024). Imported report units are not independently verified. Process high-water, not isolated scan peak.",
+                _fmt(runtime.get("peak_rss_mb"))
+                + (" MiB" if runtime.get("peak_rss_unit") == "MiB" else " (recorded field)"),
+                (
+                    "Recorded process memory in MiB. Source: "
+                    + str(runtime.get("rss_source", "not recorded"))
+                    + ". Not isolated scan peak."
+                    if runtime.get("peak_rss_unit") == "MiB"
+                    else "Canonical Linux scanner uses MiB (KiB / 1024). Imported report units are not independently verified. Process high-water, not isolated scan peak."
+                ),
             ),
             (
                 "Device / RSS scope",

@@ -4,6 +4,7 @@ import json
 import struct
 import numpy as np
 import pytest
+import sys
 from stegogate.intake import inspect_artifact
 from stegogate.precision import analyze_precision, describe_words
 from stegogate.picklescan_scan import run_picklescan
@@ -191,6 +192,7 @@ def test_pickle_zip_bomb_budget(tmp_path):
     assert r["status"] == "failed"
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Linux-only adapter or Bash launcher")
 def test_pickle_timeout_explicit(tmp_path, monkeypatch):
     import stegogate.picklescan_scan as adapter
 

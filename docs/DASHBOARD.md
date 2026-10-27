@@ -48,3 +48,6 @@ Chart units: reported `*_fraction` feature fields are converted to percentages f
 
 ## v0.4 controls
 The Evidence Assistant tab offers deterministic offline interpretation and explicit Groq-only requests. A preview, per-report/model/prompt consent, server-side-key configured check and generate action precede egress. Plain-text output, mandatory caveats and scoped session caches prevent narrative from becoming scan evidence. The detailed PDF expander prepares a local downloadable report on demand; optional interpretation appendix is off by default. PDF generation never invokes Groq. JSON remains the complete evidence export; PDF bounds/omissions are disclosed.
+
+## Native Windows v0.5
+Launch with `scripts\run_dashboard.cmd` from PowerShell or use the direct Python command in WINDOWS.md. The upload form disables Linux-only static controls and explains the gap. Reading prepared demo evidence is available, but native demo preparation/behavior workers refuse before download or launch. Core scans, reference comparison and exports stay available.

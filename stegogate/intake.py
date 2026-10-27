@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import stat
 import struct
+import sys
 
 DEFAULT_MAX_ARTIFACT_BYTES = 256 * 1024 * 1024
 DEFAULT_MAX_HEADER_BYTES = 8 * 1024 * 1024
@@ -46,6 +47,10 @@ def _limit(config, name, default, hard_max=None):
 
 def _open_regular(path):
     """Refuse symlinks/devices/FIFOs before any blocking reads."""
+    if sys.platform == "win32":
+        from .platform_support import open_windows_regular
+
+        return open_windows_regular(path)
     fd = os.open(os.fspath(path), os.O_RDONLY | os.O_NONBLOCK | getattr(os, "O_NOFOLLOW", 0))
     try:
         if not stat.S_ISREG(os.fstat(fd).st_mode):

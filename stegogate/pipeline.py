@@ -4,12 +4,12 @@ from __future__ import annotations
 import logging
 import os
 import platform
-import resource
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 from .schemas import ScanConfig, ScanReport
+from .platform_support import memory_snapshot, capabilities
 
 logger = logging.getLogger(__name__)
 
@@ -181,8 +181,9 @@ def scan_artifact(path, reference_path=None, config=None) -> dict:
         "runtime": {
             "device": "cpu",
             "duration_seconds": round(time.perf_counter() - started, 4),
-            "peak_rss_mb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024, 2),
-            "rss_scope": "process high-water mark, not isolated scan peak",
+            **memory_snapshot(),
+            "platform": platform.system(),
+            "capabilities": capabilities(),
             "python_version": platform.python_version(),
         },
     }

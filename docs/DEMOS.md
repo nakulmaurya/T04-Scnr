@@ -124,3 +124,6 @@ Tests: `python -m pytest -q tests/test_demo*.py`. Dependency-light security test
 ### Post-QA hardening validation
 
 The worker hardening passed **16 CPU demo tests** and explicit preparation plus 100-sample verification API calls for both MNIST checkpoints under the new limits. The fixed first-100 sample smoke results were epoch 1: 95/100 clean correct and 0/100 shifted-label trigger hits; epoch 2: 98/100 clean correct and 97/100 shifted-label trigger hits. These are smoke-test subsets, not replacements for the full-set measurements. Smoke outputs live under `data/demo/hardening-smoke/` on the CPU validation host (JSON evidence also copied locally); these deliberately do not overwrite the authoritative full-10,000-image evidence above.
+
+## Windows capability boundary (v0.5)
+Catalog and already prepared evidence may be read on Windows. Preparation refuses before downloads, and verification refuses before starting a worker, because reviewed Linux resource/process controls are unavailable. Use the documented Linux/WSL2 environment; do not remove limits or replace the worker with an unsafe loader.

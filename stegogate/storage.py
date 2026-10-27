@@ -5,6 +5,7 @@ import io
 import json
 import os
 import tempfile
+import sys
 from pathlib import Path
 from uuid import UUID
 from .schemas import ScanReport
@@ -14,7 +15,10 @@ MAX_REPORT_BYTES = 32 * 1024**2
 
 
 def data_root() -> Path:
-    root = Path(os.environ.get("STEGOGATE_DATA_DIR", str(Path.cwd() / "data" / "runtime"))).expanduser()
+    default = Path.cwd() / "data" / "runtime"
+    if sys.platform == "win32" and os.environ.get("LOCALAPPDATA"):
+        default = Path(os.environ["LOCALAPPDATA"]) / "T04-Scnr" / "runtime"
+    root = Path(os.environ.get("STEGOGATE_DATA_DIR", str(default))).expanduser()
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
     return root.resolve()
 

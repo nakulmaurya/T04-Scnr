@@ -17,7 +17,7 @@ Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [f
 | Capability | What you get | Scope boundary |
 | --- | --- | --- |
 | Artifact inspection | Strict safetensors inventory, format and provenance | No arbitrary uploaded-model execution |
-| Static rules | Optional ModelAudit and Picklescan adapters, reported separately | Findings can overlap; completion is not a pass |
+| Static rules | Optional Linux-isolated ModelAudit and Picklescan adapters, reported separately | Findings can overlap; completion is not a pass |
 | Weight investigation | Sampled F32 features, entropy and bit-plane views | Statistical irregularity is not proof of a payload |
 | Precision-aware evidence | Separate descriptive F16/BF16 statistics | No silent reuse of F32 detector thresholds |
 | Controlled-manipulation detector | CPU Random Forest with transparent JSON inference | A benchmark-class vote—not a malware probability |
@@ -33,7 +33,25 @@ Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [f
 
 ## Quick start
 
-**Python 3.11+; Linux is the reviewed platform for isolated scanner adapters.**
+**Python 3.11+ (3.11 and 3.13 tested). Choose the commands for your operating system.**
+
+### Windows PowerShell - native app
+
+```powershell
+git clone https://github.com/nakulmaurya/T04-Scnr.git
+cd T04-Scnr
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e "."
+.\.venv\Scripts\t04-scnr.exe doctor
+.\scripts\run_dashboard.cmd
+```
+
+No virtual-environment activation, administrator access or Bash is required. If `python` is unavailable, use `py -3 -m venv .venv`. Keep the clone outside OneDrive when possible. Windows runtime state defaults to `%LOCALAPPDATA%\T04-Scnr\runtime`.
+
+**Native Windows supports the UI, regular-file intake, numerical analysis, reference diff, JSON RF scoring, offline reports and optional Groq.** The reviewed ModelAudit/Picklescan sandbox and demo execution require Linux/WSL2; they remain explicitly unavailable on Windows rather than running without isolation. See the [Windows guide](docs/WINDOWS.md) for direct Python launch, development installation and capability details.
+
+### Linux / WSL2 - full isolated scanner path
+
 
 ```bash
 git clone https://github.com/nakulmaurya/T04-Scnr.git
@@ -73,6 +91,8 @@ Offline interpretation needs no key. Groq is opt-in: review the redacted evidenc
 
 ## Reproducibility and evaluation
 
+Windows development commands and native CI scope are in [WINDOWS.md](docs/WINDOWS.md). The commands below use Linux paths.
+
 ```bash
 .venv/bin/ruff check .
 .venv/bin/python -m pytest -q
@@ -97,6 +117,8 @@ artifacts/            Ignored generated outputs (empty placeholder only)
 The internal Python namespace `stegogate`, legacy `stegogate` CLI alias and `STEGOGATE_*` configuration names are retained for compatibility. The public project and installed distribution are **T04-Scnr / t04-scnr**. There is no detector or schema change implied by the rename.
 
 ## Documentation
+
+Release **0.5.0** adds native Windows adapters and launchers; earlier illustrated submission reports describe v0.4.2.
 
 Start with the [documentation index](docs/README.md), [reviewer guide](docs/SUBMISSION.md), [security policy](SECURITY.md) and [contributing guide](CONTRIBUTING.md). Historical build notes are clearly separated from current setup instructions.
 

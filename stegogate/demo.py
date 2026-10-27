@@ -237,6 +237,13 @@ def _run_bounded(command, env, timeout):
 
 
 def _subprocess(action, demo_id, root, config):
+    if sys.platform != "linux":
+        return {
+            "status": "unavailable",
+            "warnings": [
+                "Isolated demo preparation/verification requires Linux; use WSL2 on Windows. No worker was started."
+            ],
+        }
     timeout = min(max(float(config.get("timeout_seconds", 180)), 1), 600)
     command = [
         sys.executable,
@@ -305,6 +312,14 @@ def prepare_demo(demo_id: str, root: Path, config=None) -> dict:
     """Explicit online acquisition + isolated restricted conversion. Root is demo dir."""
     e = _entry(demo_id)
     _optin(config)
+    if sys.platform != "linux":
+        return {
+            "status": "unavailable",
+            "demo_id": demo_id,
+            "warnings": [
+                "Demo preparation requires Linux isolation; use WSL2 on Windows. Nothing was downloaded or executed."
+            ],
+        }
     started = time.monotonic()
     source = _file(root, demo_id, e["filename"])
     _download(
@@ -486,7 +501,7 @@ def _prepared(demo_id, root):
     p = _file(root, demo_id, "manifest.json")
     if not p.is_file() or p.stat().st_size > 16384:
         raise ValueError("Missing/invalid preparation manifest")
-    meta = json.loads(p.read_text())
+    meta = json.loads(p.read_text(encoding="utf-8"))
     if (
         meta.get("demo_id") != demo_id
         or meta.get("source_sha256") != e["sha256"]

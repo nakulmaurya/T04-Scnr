@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import sys
 from unittest.mock import patch
 
 # Test loading independently of the application/package dependencies.
@@ -44,7 +45,7 @@ class DemoSecurityTests(unittest.TestCase):
                 demo.verify_behavior("mnist-epoch02", Path("/tmp"), {"opt_in": True, "sample_count": n})
 
     def test_no_torch_load_in_runtime_or_import_scope(self):
-        tree = ast.parse(SOURCE.read_text())
+        tree = ast.parse(SOURCE.read_text(encoding="utf-8"))
         calls = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -66,7 +67,7 @@ class DemoSecurityTests(unittest.TestCase):
                 for k in call.keywords
             )
         )
-        self.assertNotIn("add_safe_globals", SOURCE.read_text())
+        self.assertNotIn("add_safe_globals", SOURCE.read_text(encoding="utf-8"))
         self.assertFalse(
             any(
                 isinstance(n, ast.Import) and any(a.name.startswith("torch") for a in n.names)
@@ -150,6 +151,7 @@ class DemoSecurityTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     demo._prepared("mnist-epoch02", root)
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_subprocess_no_shell_and_isolation(self):
         with patch.object(
             demo, "_run_bounded", return_value=("completed", b'{"status":"completed"}', b"", 0)
@@ -160,7 +162,7 @@ class DemoSecurityTests(unittest.TestCase):
             self.assertIn("--worker", command)
             self.assertEqual(env["HF_HUB_OFFLINE"], "1")
             self.assertNotIn("PYTHONPATH", env)
-        tree = ast.parse(SOURCE.read_text())
+        tree = ast.parse(SOURCE.read_text(encoding="utf-8"))
         launch = next(
             n
             for n in ast.walk(tree)
@@ -170,6 +172,7 @@ class DemoSecurityTests(unittest.TestCase):
         self.assertIs(options["shell"].value, False)
         self.assertIs(options["start_new_session"].value, True)
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_stream_output_limit_shared_across_both_pipes(self):
         command = [demo.sys.executable, "-I", "-c", "import os;os.write(1,b'a'*40000);os.write(2,b'b'*40000)"]
         with patch.object(demo.os, "killpg", wraps=demo.os.killpg) as kill:
@@ -178,6 +181,7 @@ class DemoSecurityTests(unittest.TestCase):
         self.assertLessEqual(len(out) + len(err), 65536)
         kill.assert_called_once()
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_stream_timeout_kills_process_group(self):
         command = [demo.sys.executable, "-I", "-c", "import time;time.sleep(20)"]
         with patch.object(demo.os, "killpg", wraps=demo.os.killpg) as kill:
@@ -186,6 +190,7 @@ class DemoSecurityTests(unittest.TestCase):
         self.assertIsNotNone(code)
         kill.assert_called_once()
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_stream_normal_output_and_abnormal_exit(self):
         command = [demo.sys.executable, "-I", "-c", "print('small output')"]
         state, out, err, code = demo._run_bounded(command, dict(demo.os.environ), 5)
@@ -198,7 +203,7 @@ class DemoSecurityTests(unittest.TestCase):
             )
 
     def test_worker_resource_caps_before_model_import(self):
-        source = SOURCE.read_text()
+        source = SOURCE.read_text(encoding="utf-8")
         for name in ["RLIMIT_AS", "RLIMIT_CPU", "RLIMIT_NOFILE", "RLIMIT_FSIZE", "RLIMIT_CORE"]:
             self.assertIn(name, source)
         tree = ast.parse(source)
@@ -220,7 +225,7 @@ class DemoSecurityTests(unittest.TestCase):
         self.assertLess(max(caps), min(workers))
 
     def test_source_manifest_matches_catalog(self):
-        manifest = json.loads((SOURCE.parents[1] / "docs" / "demo_sources.json").read_text())
+        manifest = json.loads((SOURCE.parents[1] / "docs" / "demo_sources.json").read_text(encoding="utf-8"))
         for row in demo.get_demo_catalog():
             record = manifest["artifacts"][row["demo_id"]]
             for key in ["sha256", "revision", "size_bytes", "repository", "filename"]:

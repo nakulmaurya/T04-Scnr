@@ -102,6 +102,7 @@ class AdversarialReviewTests(unittest.TestCase):
         path.write_bytes(struct.pack("<Q", 2**63))
         self.assertTrue(intake.inspect_artifact(path)["errors"])
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_fifo_and_symlink_never_read(self):
         fifo = self.root / "fifo"
         os.mkfifo(fifo)
@@ -299,6 +300,7 @@ print(','.join(blocked))
         self.assertEqual(result["returncode"], 0, result["stderr"])
         self.assertEqual(result["stdout"].strip(), "network,process,pickle")
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_scanner_fixed_arguments_allowlisted_environment_and_no_network_flags(self):
         path = f32(self.root / "input.safetensors", [1.0] * 64)
         helps = " ".join(
@@ -329,6 +331,7 @@ print(','.join(blocked))
         self.assertEqual(kw["env"]["CUDA_VISIBLE_DEVICES"], "")
         self.assertNotIn("--allow-unsafe", command)
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_scanner_output_and_timeout_bounded(self):
         env = {"PATH": os.defpath}
         result = static_scan._run_bounded(

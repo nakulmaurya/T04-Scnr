@@ -166,7 +166,7 @@ class MLTests(unittest.TestCase):
     def test_recorded_threshold_used_and_invalid_threshold_fails(self):
         directory, _ = self.artifact()
         path = directory / "detector_manifest.json"
-        manifest = json.loads(path.read_text())
+        manifest = json.loads(path.read_text(encoding="utf-8"))
         # Leaf vote is 1.0: strict positive class includes equality at threshold.
         manifest["threshold"] = 1.0
         path.write_text(json.dumps(manifest))
@@ -221,7 +221,7 @@ class MLTests(unittest.TestCase):
         )
         self.assertEqual(result["status"], "completed")
         manifest = result["manifest"]
-        model = json.loads((self.root / "trained" / "detector.json").read_text())
+        model = json.loads((self.root / "trained" / "detector.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["test_evaluations"], 1)
         self.assertEqual(manifest["threshold_selection"]["data_partition"], "validation")
         self.assertEqual(manifest["evaluation"]["test"]["threshold"], manifest["threshold"])

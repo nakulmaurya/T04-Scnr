@@ -166,6 +166,7 @@ class IntakeTests(CoreCase):
         self.assertTrue(r["errors"])
         self.assertFalse(r["sha256"])
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_symlink_and_fifo(self):
         self.make()
         link = self.root / "link.safetensors"
@@ -376,6 +377,7 @@ class StaticTests(CoreCase):
         self.assertEqual(r["status"], "unavailable")
         self.assertEqual(r["findings"], [])
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_timeout_propagation(self):
         self.make()
         with (
@@ -391,6 +393,7 @@ class StaticTests(CoreCase):
             r = run_modelaudit(self.path)
         self.assertEqual(r["status"], "timed_out")
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_unsafe_cli_not_used(self):
         self.make()
         with (
@@ -404,6 +407,7 @@ class StaticTests(CoreCase):
         self.assertEqual(r["status"], "unavailable")
         self.assertEqual(runner.call_count, 1)
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_static_normalization_and_fixed_flags(self):
         self.make()
         payload = dict(
@@ -470,6 +474,7 @@ class StaticTests(CoreCase):
         self.assertEqual(findings[0]["severity"], "HIGH")
         self.assertEqual(findings[0]["original_severity"], "CRITICAL")
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_output_limit(self):
         self.make()
         with (
@@ -484,6 +489,7 @@ class StaticTests(CoreCase):
         ):
             self.assertEqual(run_modelaudit(self.path)["status"], "partial")
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_malformed_json(self):
         self.make()
         with (
@@ -498,6 +504,7 @@ class StaticTests(CoreCase):
         ):
             self.assertEqual(run_modelaudit(self.path)["status"], "failed")
 
+    @unittest.skipUnless(sys.platform == "linux", "Linux-only isolation/process contract; portable Windows paths have separate tests")
     def test_bounded_process_timeout_and_output(self):
         cmd = [sys.executable, "-c", "import time;time.sleep(3)"]
         r = _run_bounded(cmd, timeout=0.1, max_output=1024, env=os.environ.copy(), cwd=self.root)

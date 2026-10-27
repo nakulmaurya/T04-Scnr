@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 - Native Windows support
+- Added a Win32 regular-file/binary intake adapter and portable process-memory telemetry.
+- Added PowerShell/CMD launchers, Windows-specific storage defaults and OS-specific setup instructions.
+- Native Windows supports tensor analysis, reference comparison, JSON RF inference, reports and optional Groq; Linux-only isolation remains fail-closed with explicit coverage warnings.
+- Added Windows/Linux Python 3.11/3.13 CI and native platform/launcher/file-boundary regressions.
+- No detector threshold or report-schema version change; previous release reports remain valid historical records.
+
 ## 0.4.2 — T04-Scnr submission packaging
 - Renamed public UI, reports, CLI distribution and repository branding to T04-Scnr.
 - Added the `t04-scnr` command while preserving the legacy `stegogate` command, Python namespace and environment configuration compatibility.

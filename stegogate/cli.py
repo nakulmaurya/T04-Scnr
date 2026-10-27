@@ -124,11 +124,13 @@ def main(argv=None) -> int:
                 except importlib.metadata.PackageNotFoundError:
                     packages[name] = None
             from .explanation import get_api_status
+            from .platform_support import capabilities
 
             _print(
                 {
                     "groq": get_api_status(),
                     "python": platform.python_version(),
+                    "capabilities": capabilities(),
                     "device": "cpu",
                     "packages": packages,
                     "modelaudit_executable": shutil.which("modelaudit"),

@@ -28,7 +28,7 @@ POLICY_SHA = "68451d7f5a75622733d9031771eaccde6f5301157c783be86f706a8b161d825c"
 def policy():
     if digest(POLICY) != POLICY_SHA:
         raise ValueError("predeclared policy changed")
-    return json.loads(POLICY.read_text())
+    return json.loads(POLICY.read_text(encoding="utf-8"))
 
 
 def fetch(spec, target, allow_network):
@@ -158,13 +158,13 @@ def fit():
     root = data_root()
     out = root / "benchmark-v2"
     detector = root / "detector-v2"
-    preparation = json.loads((out / "preparation.json").read_text())
+    preparation = json.loads((out / "preparation.json").read_text(encoding="utf-8"))
     if digest(out / "rows.jsonl") != preparation["rows_sha256"]:
         raise ValueError("rows changed")
     profile = out / "data_profile.txt"
     if not profile.is_file() or profile.stat().st_size < 100:
         raise ValueError("run and inspect the dataset profile before fitting")
-    rows = [json.loads(line) for line in (out / "rows.jsonl").read_text().splitlines()]
+    rows = [json.loads(line) for line in (out / "rows.jsonl").read_text(encoding="utf-8").splitlines()]
     cfg = p["hyperparameters"] | dict(
         seed=p["seed"],
         threshold_selection="fixed",
@@ -177,7 +177,7 @@ def fit():
     manifest["label_definitions"] = {"0": p["label0"], "1": "added harmless controlled low-byte payload"}
     manifest["benchmark_manifest_relative_path"] = "benchmark-v2/preparation.json"
     write_json(detector / "detector_manifest.json", manifest)
-    provenance = [json.loads(line) for line in (out / "row_provenance.jsonl").read_text().splitlines()]
+    provenance = [json.loads(line) for line in (out / "row_provenance.jsonl").read_text(encoding="utf-8").splitlines()]
     windows = [dict(tensor=str(i), window_index=0, features=r["features"]) for i, r in enumerate(rows)]
     scores = score_windows(windows, detector / "detector.json")
     if scores["status"] != "completed":

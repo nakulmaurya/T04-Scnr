@@ -27,3 +27,7 @@ Older validation records describe their historical environments and should not b
 - [Project report](PROJECT_REPORT.md): problem statement, solution, approach and conclusion.
 - [Formatted PDF](T04-Scnr_Project_Report.pdf) with actual screenshots.
 - Rebuild with `python scripts/build_project_report.py` from the repository root.
+
+## Windows
+- [Native Windows setup and capability matrix](WINDOWS.md).
+- [Windows release validation](VALIDATION_V050.md).

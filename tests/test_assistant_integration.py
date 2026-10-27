@@ -4,6 +4,7 @@ import copy
 from pathlib import Path
 from uuid import uuid4
 import pytest
+import sys
 
 
 def sample():
@@ -113,6 +114,7 @@ def test_render_no_automatic_provider_calls(tmp_path, monkeypatch):
     "mode,symlink,expected",
     [(0o600, False, True), (0o400, False, True), (0o644, False, False), (0o600, True, False)],
 )
+@pytest.mark.skipif(sys.platform != "linux", reason="Linux-only adapter or Bash launcher")
 def test_launcher_private_file_only(tmp_path, mode, symlink, expected):
     import os
     import shutil
@@ -150,6 +152,7 @@ def test_launcher_private_file_only(tmp_path, mode, symlink, expected):
     assert not marker.exists()
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Linux-only adapter or Bash launcher")
 def test_launcher_oversized_key_file_ignored(tmp_path):
     import os
     import shutil

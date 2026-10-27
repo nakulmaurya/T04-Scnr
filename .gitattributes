@@ -9,3 +9,6 @@
 
 # Preserve exact bytes of the SHA-pinned recorded demonstration on Windows.
 /docs/visual-demo/samples.json text eol=lf
+
+/docs/controlled-demo/*.json text eol=lf
+*.safetensors binary

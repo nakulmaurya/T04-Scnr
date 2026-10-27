@@ -8,6 +8,14 @@
 
 > **Research prototype—not a safety certificate.** No finding does not establish safety. Static indicators, numerical anomalies, learned manipulation votes and known-trigger behavior answer different questions. StegoLens does not universally detect malware or unknown-trigger backdoors.
 
+## Controlled normal-versus-backdoored demo
+
+The default experience now compares **two actually trained MNIST models**: a normal training control and its deliberately backdoored copy. For the first digit, both answer 7 normally; with the same known white-square input, the normal control stays at 7 and the backdoored copy answers 0. The UI replays actual saved predictions, with a magnified trigger and full-test denominators. It does not run uploaded models or claim the scanner discovered the backdoor.
+
+![Actual controlled-model comparison with the trigger enabled](docs/assets/controlled-demo.png)
+
+See [experiment method, measured results, verification and limits](docs/CONTROLLED_DEMO.md). The downloadable standalone HTML works offline without installation. Earlier public-checkpoint and message-lab experiences remain under **More learning experiments**.
+
 ## New to the project?
 
 **Steganography** means hiding information inside something that looks ordinary. In an AI model, information can be hidden in its stored numbers. StegoLens looks for specific indicators and explains its coverage; it does not prove that a model contains malware or certify that it is safe. A behavioral backdoor (a hidden response to a special input) is a different question from hidden bytes.
@@ -51,10 +59,10 @@ Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [f
 
 ## Try the visual preview
 
-This work is on the **`visual-experience` review branch**; the default branch/live deployment is unchanged. To try this version, clone with:
+This work is on the **`controlled-model-demo` review branch**; the default branch/live deployment is unchanged. To try this version, clone with:
 
 ```text
-git clone --branch visual-experience https://github.com/nakulmaurya/T04-Scnr.git
+git clone --branch controlled-model-demo https://github.com/nakulmaurya/T04-Scnr.git
 ```
 
 Then use the operating-system setup below. The existing six-page reports describe the earlier inspection baseline; the new visual lab is explained in [Visual Experiences](docs/VISUAL_EXPERIENCES.md). [Validation and scope](docs/VALIDATION_VISUAL_PREVIEW.md).

@@ -1148,7 +1148,7 @@ def main():
             ["Visual experiences", "Analysis console", "Compare reports", "Demo & evaluation", "Compatibility & scope"],
             key="workspace_route",
             format_func=lambda route: {
-                "Visual experiences": "Start here · visual experiences",
+                "Visual experiences": "Normal vs backdoored demo",
                 "Analysis console": "Inspect a model file",
                 "Compare reports": "Compare saved scans",
                 "Demo & evaluation": "Prepared evidence · technical",
@@ -1168,9 +1168,13 @@ def main():
         "running it. This is steganographic malware detection research—not proof of malware or safety."
     )
     if route == "Visual experiences":
-        from stegogate.visual_experiences import render_visual_experiences
+        from stegogate.controlled_demo import render_controlled_demo
 
-        render_visual_experiences()
+        render_controlled_demo()
+        with st.expander("More learning experiments · message lab and earlier public example"):
+            from stegogate.visual_experiences import render_visual_experiences
+
+            render_visual_experiences()
 
         def open_inspector():
             st.session_state["workspace_route"] = "Analysis console"

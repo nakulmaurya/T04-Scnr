@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main, windows-support, beginner-dashboard, visual-experience]
+    branches: [main, windows-support, beginner-dashboard, visual-experience, controlled-model-demo]
   pull_request:
   workflow_dispatch:
 permissions:

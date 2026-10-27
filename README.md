@@ -8,6 +8,10 @@
 
 > **Research prototype—not a safety certificate.** No finding does not establish safety. Static indicators, numerical anomalies, learned manipulation votes and known-trigger behavior answer different questions. StegoLens does not universally detect malware or unknown-trigger backdoors.
 
+## Live inference mode
+
+The `live-demo-video` review branch adds **Demo execution → Live inference**. Press **Run both models now** to perform fresh CPU forward passes on the two fixed, hash-verified models. Input changes clear old answers; failures never substitute recorded predictions. Install trusted CPU PyTorch in the app environment; see [live setup and recording scope](docs/LIVE_DEMO.md). Ordinary uploaded-file scanning still never executes uploaded models.
+
 ## Controlled normal-versus-backdoored demo
 
 The default experience now compares **two actually trained MNIST models**: a normal training control and its deliberately backdoored copy. For the first digit, both answer 7 normally; with the same known white-square input, the normal control stays at 7 and the backdoored copy answers 0. The UI replays actual saved predictions, with a magnified trigger and full-test denominators. It does not run uploaded models or claim the scanner discovered the backdoor.

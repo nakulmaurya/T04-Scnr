@@ -1168,9 +1168,16 @@ def main():
         "running it. This is steganographic malware detection research—not proof of malware or safety."
     )
     if route == "Visual experiences":
-        from stegogate.controlled_demo import render_controlled_demo
+        demo_mode = st.radio("Demo execution", ["Recorded results", "Live inference"],
+                             horizontal=True, key="demo_execution_mode")
+        if demo_mode == "Live inference":
+            from stegogate.live_controlled_demo import render_live_demo
 
-        render_controlled_demo()
+            render_live_demo()
+        else:
+            from stegogate.controlled_demo import render_controlled_demo
+
+            render_controlled_demo()
         with st.expander("More learning experiments · message lab and earlier public example"):
             from stegogate.visual_experiences import render_visual_experiences
 

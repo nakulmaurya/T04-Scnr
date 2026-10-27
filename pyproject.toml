@@ -20,6 +20,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+live = ["torch>=2.6,<3"]
 security = ["modelaudit==0.2.54", "picklescan==1.0.5"]
 demo = ["transformers>=4.46,<5", "Pillow>=11,<13"]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1", "pypdf>=5,<7"]

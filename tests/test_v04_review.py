@@ -11,6 +11,7 @@ import importlib
 import io
 import json
 import socket
+import sys
 
 import pytest
 
@@ -20,9 +21,28 @@ def no_external_network(monkeypatch):
     def blocked(*args, **kwargs):
         raise AssertionError("QA forbids external network")
 
+    original_connect = socket.socket.connect
+
+    def guarded_connect(sock, address):
+        # Windows asyncio implements its self-pipe through a loopback socketpair.
+        # Only that local transport is allowed; DNS names and external IPs still
+        # fail, and create_connection (including provider access) stays blocked.
+        if sys.platform == "win32" and isinstance(address, tuple) and address[0] in ("127.0.0.1", "::1"):
+            return original_connect(sock, address)
+        return blocked(sock, address)
+
     monkeypatch.setattr(socket, "create_connection", blocked)
-    monkeypatch.setattr(socket.socket, "connect", blocked)
+    monkeypatch.setattr(socket.socket, "connect", guarded_connect)
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
+
+
+def test_network_tripwire_still_blocks_external_connections():
+    with pytest.raises(AssertionError, match="QA forbids"):
+        socket.create_connection(("127.0.0.1", 443))
+    with socket.socket() as sock:
+        for target in ("example.com", "8.8.8.8"):
+            with pytest.raises(AssertionError, match="QA forbids"):
+                sock.connect((target, 443))
 
 
 @pytest.fixture

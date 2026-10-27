@@ -316,6 +316,13 @@ class EvidenceTests(unittest.TestCase):
 class ProviderTests(unittest.TestCase):
     def setUp(self):
         self.report = report_fixture()
+        # Build the real verifying context before clearing the environment. Windows
+        # certificate-store initialization can depend on OS environment variables;
+        # it is outside the mocked HTTP and tiny transport-deadline contract.
+        context = ex.ssl.create_default_context()
+        tls = patch.object(ex.ssl, "create_default_context", return_value=context)
+        tls.start()
+        self.addCleanup(tls.stop)
         self.env = patch.dict(os.environ, {"GROQ_API_KEY": KEY}, clear=True)
         self.env.start()
         self.addCleanup(self.env.stop)

@@ -1,14 +1,26 @@
-<p align="center"><img src="docs/assets/banner.svg" alt="T04-Scnr — Inspect the artifact. Question the evidence." width="100%"></p>
+<p align="center"><img src="docs/assets/banner.svg" alt="StegoLens — Steganographic Malware Detection in AI Model Files" width="100%"></p>
 
 <p align="center"><a href="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml"><img src="https://github.com/nakulmaurya/T04-Scnr/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
 
-<p align="center"><strong>A local-first research console for model-artifact forensics.</strong><br>Inspect structure, investigate sampled weight signals, compare evidence and export reports that explain their numbers.</p>
+<p align="center"><strong>StegoLens — Steganographic Malware Detection in AI Model Files.</strong><br>A local research tool for examining model files, investigating hidden-data indicators, comparing checkpoints and explaining the results.</p>
 
 <p align="center"><a href="#quick-start">Quick start</a> · <a href="docs/GETTING_STARTED.md">Setup guide</a> · <a href="docs/ARCHITECTURE.md">Architecture</a> · <a href="docs/PDF_REPORT.md">PDF reports</a> · <a href="docs/SUBMISSION.md">Reviewer guide</a></p>
 
-> **Research prototype—not a safety certificate.** No finding does not establish safety. Static indicators, numerical anomalies, learned manipulation votes and known-trigger behavior answer different questions. T04-Scnr does not universally detect malware or unknown-trigger backdoors.
+> **Research prototype—not a safety certificate.** No finding does not establish safety. Static indicators, numerical anomalies, learned manipulation votes and known-trigger behavior answer different questions. StegoLens does not universally detect malware or unknown-trigger backdoors.
 
-## Submission report
+## New to the project?
+
+**Steganography** means hiding information inside something that looks ordinary. In an AI model, information can be hidden in its stored numbers. StegoLens looks for specific indicators and explains its coverage; it does not prove that a model contains malware or certify that it is safe. A behavioral backdoor (a hidden response to a special input) is a different question from hidden bytes.
+
+The dashboard starts in **Simple view**: **Check a model → run the check → read what was checked and what remains unknown**. Use **Show technical details** for the original investigative tabs.
+
+**Name compatibility:** the project is now displayed as StegoLens. The repository URL, `t04-scnr` and `stegogate` commands, internal `stegogate` package, `STEGOGATE_*` settings and existing runtime directories remain valid. A `stegolens` command alias is also provided. No existing report is rewritten by the rename.
+
+## Supervisor report and visual demo
+
+The new [six-page Word report](docs/StegoLens_Project_Report.docx) and [PDF](docs/StegoLens_Project_Report.pdf) explain the problem, approach, architecture, working process, results and limitations in plain language. See [how to present the demo](docs/DEMO_PRESENTATION.md).
+
+## Earlier technical submission report
 
 Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [formatted PDF](docs/T04-Scnr_Project_Report.pdf): **Problem Statement, Our Solution, Approach and Conclusion**, with actual dashboard and report screenshots.
 
@@ -27,9 +39,9 @@ Read the illustrated [project report](docs/PROJECT_REPORT.md) or download the [f
 
 ## Console preview
 
-![T04-Scnr analysis console with explicit local-scan controls](docs/assets/console.png)
+![StegoLens beginner console with explicit local-scan controls](docs/assets/stegolens-console.png)
 
-*Actual empty-state dashboard; no private report or model data included.*
+*Current Simple-view empty state. No private report or model data are included. Technical investigative tabs remain available through the sidebar toggle.*
 
 ## Quick start
 

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "t04-scnr"
-version = "0.5.0"
-description = "Local-first model artifact forensics with evidence-grounded interpretation and explainable reports"
+version = "0.6.0"
+description = "StegoLens: research into steganographic malware indicators in AI model files"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2,<3", "scipy>=1.14,<2", "scikit-learn>=1.6,<2",
@@ -25,6 +25,7 @@ demo = ["transformers>=4.46,<5", "Pillow>=11,<13"]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1", "pypdf>=5,<7"]
 
 [project.scripts]
+stegolens = "stegogate.cli:main"
 t04-scnr = "stegogate.cli:main"
 stegogate = "stegogate.cli:main"
 

@@ -18,7 +18,7 @@ def test_empty_console_and_demo(tmp_path, monkeypatch):
     monkeypatch.setenv("STEGOGATE_DATA_DIR", str(tmp_path))
     app = AppTest.from_file(APP).run(timeout=30)
     assert not app.exception
-    assert any("Inspect the artifact" in title.value for title in app.title)
+    assert any("StegoLens" in title.value for title in app.title)
     assert app.button[0].disabled
     app.sidebar.radio[0].set_value("Demo & evaluation").run(timeout=30)
     assert not app.exception
@@ -66,6 +66,7 @@ def test_populated_report_tabs_and_features(tmp_path, monkeypatch):
         "limitations": ["UI fixture, not model evidence"],
     }
     app = AppTest.from_file(APP)
+    app.session_state["dashboard_technical"] = True
     app.session_state["active_report"] = report
     app.run(timeout=30)
     assert not app.exception
@@ -121,3 +122,20 @@ def test_comparison_with_recorded_features(tmp_path, monkeypatch):
     assert not app.exception
     assert len(app.get("plotly_chart")) == 1
     assert any("own finite sampled-window denominator" in text.value for text in app.caption)
+
+
+def test_simple_reference_metric_fits_and_keeps_exact_denominator(tmp_path, monkeypatch):
+    monkeypatch.setenv("STEGOGATE_DATA_DIR", str(tmp_path))
+    from streamlit.testing.v1 import AppTest
+
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+    app.session_state["active_report"] = {
+        "status": "partial", "verdict": "REVIEW — INDICATORS REQUIRE INVESTIGATION",
+        "artifact": {"original_name": "SYNTHETIC QA", "size_bytes": 10000},
+        "reference_analysis": {"status": "partial", "summary": {
+            "differing_sampled_bytes": 20, "compared_bytes": 80}},
+    }
+    app.run(timeout=15)
+    assert not app.exception
+    assert next(metric.value for metric in app.metric if metric.label == "Change from reference") == "25.00% changed"
+    assert any("20 changed / 80 compared bytes" in caption.value for caption in app.caption)

@@ -1,0 +1,11 @@
+{
+  "docs/StegoLens_Project_Report.docx": "ca7d60c19c579498046d49470bcfbc0454cdf0fd4e8f6f6b13aa492f55312517",
+  "docs/StegoLens_Project_Report.pdf": "2e2211267eacde7fb1980023ce2fe007e10a51396b16e2eb87fff0e07fe2c766",
+  "docs/assets/architecture_stegolens.png": "f4fefb2000b60fedc541c54ac55fe284a14dbdf1bdb96ff709f9a4beb672208a",
+  "docs/assets/working_stegolens.png": "0e7b81f3a84400ffa5219067f47d6ee919a4f00c1faae0f180026d3c04d0e95f",
+  "docs/assets/known-trigger-example.png": "3d956ace1b1d6c18c8717f1240d1d137193f08528276b4d2bbe1c4e530c4f917",
+  "docs/visual-demo/SEE-THE-DEMO.html": "76d69445c9d07c74c0104fb0ce83289062e2d64994df748a419e52cea9b480c3",
+  "docs/visual-demo/samples.json": "7efda6978fdb3ed15314443b59a6a430c72db2afcf8152fcc3689496ac335e8f",
+  "docs/visual-demo/READ-ME.txt": "aad558f6570040c1dd6c74b089197411c9431394dc7ffbc127cadf1b66e25bc5",
+  "tests/test_supervisor_report.py": "de13ae4389ba3f589bceda9b2defeffdc51d868d4f99dfc73a8bb1126abef328"
+}

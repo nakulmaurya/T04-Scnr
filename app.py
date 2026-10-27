@@ -30,7 +30,7 @@ from stegogate.ui_helpers import (
     window_rows,
 )
 
-st.set_page_config(page_title="T04-Scnr · CPU analysis console", page_icon="◈", layout="wide")
+st.set_page_config(page_title="StegoLens — Steganographic Malware Detection in AI Model Files", page_icon="◈", layout="wide")
 # Static authored styling only. Never interpolate report/upload values into HTML.
 st.markdown(
     """<style>
@@ -610,7 +610,143 @@ def render_compatibility():
     )
 
 
+def render_report_controls(report):
+    buttons = st.columns([1, 1, 3])
+    identifier = report.get("scan_id") if valid_report_id(report.get("scan_id")) else "report"
+    with buttons[0]:
+        try:
+            st.download_button(
+                "↓ JSON evidence",
+                export_json(report),
+                file_name=f"{identifier}.json",
+                mime="application/json",
+                width="stretch",
+            )
+        except ValueError:
+            st.warning("JSON export unavailable: report contains nonfinite data.")
+    with buttons[1]:
+        try:
+            st.download_button(
+                "↓ HTML report",
+                export_html(report),
+                file_name=f"{identifier}.html",
+                mime="text/html",
+                width="stretch",
+            )
+        except ValueError:
+            st.warning("HTML export unavailable: report contains nonfinite data.")
+    from stegogate.assistant_ui import render_pdf_controls
+
+    render_pdf_controls(report)
+
+
+def render_simple_report(report):
+    from stegogate.beginner_summary import beginner_summary
+
+    summary = beginner_summary(report)
+    art = as_dict(report.get("artifact"))
+    st.subheader(display_value(art.get("original_name", "Your model file")))
+    st.caption("Saved scan · " + display_value(report.get("scan_id")))
+    st.markdown("### Original recorded verdict")
+    verdict = display_value(report.get("verdict", "No conclusion recorded"))
+    if report.get("status") == "rejected":
+        st.error(verdict)
+    elif verdict.startswith("REVIEW"):
+        st.warning(verdict)
+    else:
+        st.info(verdict)
+    st.caption("This is the original scan wording, not a new judgment by the dashboard.")
+    status = display_value(report.get("status", "not_available"))
+    st.write("**Scan status: " + status + "**")
+    st.info(
+        "Partial means incomplete coverage: some checks or samples are missing. It is not a pass "
+        "and does not by itself mean a software bug. A completed check only means it ran. "
+        "No result here certifies safety or proves infection."
+    )
+    st.markdown("### What the saved scan tells you")
+    coverage, rf, reference = (summary[key] for key in ("coverage", "rf", "reference"))
+    a, b, c = st.columns(3, gap="large")
+    with a:
+        st.metric("Checks completed", f"{coverage['completed']} of {coverage['total']}")
+        st.caption(
+            "Seven separate evidence layers, including optional and format-specific checks. "
+            "This is not a safety score or a count of threats."
+        )
+    with b:
+        value = f"{rf['positive']} of {rf['eligible']} windows" if rf["positive"] is not None else "Not available"
+        st.metric("RF pattern matches", value)
+        st.caption(
+            "RF = Random Forest, a learned pattern check. Counts only recorded windows with a valid "
+            "score and their own recorded threshold, both from 0 to 1, in a completed check. "
+            "A match resembles controlled weight manipulation; it is not a malware probability."
+        )
+        st.caption(
+            f"Recorded RF rows: {display_value(rf['recorded'])}; eligible rows: {display_value(rf['eligible'])}. "
+            f"Layer status: {rf['status']}. Missing or invalid outputs are not zero matches."
+        )
+    with c:
+        value = (
+            f"{100 * reference['differing'] / reference['compared']:.2f}% changed"
+            if reference["differing"] is not None else "Not available"
+        )
+        st.metric("Change from reference", value)
+        if reference["differing"] is not None:
+            st.caption(f"{reference['differing']:,} changed / {reference['compared']:,} compared bytes.")
+        st.caption(
+            "Differing bytes / compared bytes only, not all bytes in the file. "
+            "An optional reference is another checkpoint you choose for comparison, not a guaranteed "
+            "trusted or clean model. Ordinary training can change these bytes."
+        )
+        st.caption("Reference layer status: " + reference["status"] + ". Missing comparison is not zero change.")
+    sampling = summary["sampling"]
+    if sampling["sampled"] is not None:
+        st.write(
+            f"**Weight sampling:** {sampling['sampled']:,} of {sampling['total']:,} recorded F32 "
+            "weight elements sampled. F32 means 32-bit floating-point weights; this population "
+            "is not the whole file or other number formats."
+        )
+    else:
+        st.write("**Weight sampling:** no valid sampled / total F32 element denominator is available.")
+    st.caption("These checks answer different questions. Their counts overlap and must not be added together.")
+    with st.expander("What ran, what is missing, and why it matters"):
+        for layer in coverage["layers"]:
+            st.write("**" + layer["label"] + ":** " + layer["status"])
+        st.write(
+            "Unavailable, skipped, unsupported, failed and partial checks leave coverage gaps. "
+            "No missing value is treated as zero or as a clean result. Unsampled weights and "
+            "unknown triggers may remain unobserved."
+        )
+        for limitation in report.get("limitations", []) if isinstance(report.get("limitations"), list) else []:
+            st.write("• " + display_value(limitation))
+    st.markdown("### What to do next")
+    st.write(
+        "1. Check where the model came from and whether its file hash matches a source you trust.\n"
+        "2. Review flagged patterns and missing checks with someone who understands the model; "
+        "do not treat an absence of indicators as permission to execute it.\n"
+        "3. Save the report below. Turn on **Show technical details** in the sidebar to inspect "
+        "the underlying records and the original evidence."
+    )
+    render_report_controls(report)
+    with st.expander("Evidence Assistant · optional explanation"):
+        from stegogate.assistant_ui import render_interpretation
+
+        try:
+            render_interpretation(report)
+        except (ValueError, TypeError):
+            st.warning(
+                "Evidence Assistant unavailable: this report exceeds its input budget or has unsupported values. "
+                "The original report and existing evidence views are unchanged."
+            )
+
+
 def render_report(report):
+    if st.session_state.get("dashboard_technical", False):
+        render_technical_report(report)
+    else:
+        render_simple_report(report)
+
+
+def render_technical_report(report):
     art = as_dict(report.get("artifact"))
     st.subheader(display_value(art.get("original_name", "Artifact evidence")))
     st.caption(
@@ -643,33 +779,9 @@ def render_report(report):
     st.caption(
         "Window counts overlap and are not independent detections. ML votes describe controlled-manipulation patterns, not backdoor probabilities."
     )
-    buttons = st.columns([1, 1, 3])
-    identifier = report.get("scan_id") if valid_report_id(report.get("scan_id")) else "report"
-    with buttons[0]:
-        try:
-            st.download_button(
-                "↓ JSON evidence",
-                export_json(report),
-                file_name=f"{identifier}.json",
-                mime="application/json",
-                width="stretch",
-            )
-        except ValueError:
-            st.warning("JSON export unavailable: report contains nonfinite data.")
-    with buttons[1]:
-        try:
-            st.download_button(
-                "↓ HTML report",
-                export_html(report),
-                file_name=f"{identifier}.html",
-                mime="text/html",
-                width="stretch",
-            )
-        except ValueError:
-            st.warning("HTML export unavailable: report contains nonfinite data.")
-    from stegogate.assistant_ui import render_pdf_controls, render_interpretation
+    render_report_controls(report)
+    from stegogate.assistant_ui import render_interpretation
 
-    render_pdf_controls(report)
     tabs = st.tabs(
         [
             "Overview",
@@ -725,18 +837,18 @@ def saved_reports(storage):
 
 
 def render_upload(storage):
-    with st.expander("New static analysis", expanded="active_report" not in st.session_state):
+    with st.expander("Check a model file", expanded="active_report" not in st.session_state):
         st.caption(
             "One artifact, optional compatible reference. Maximum 256 MiB per file. Uploads are staged with random server-owned names; original names are display-only."
         )
         a, b = st.columns(2)
         with a:
             artifact = st.file_uploader(
-                "Artifact", type=None, accept_multiple_files=False, key="artifact_upload"
+                "Model file", type=None, accept_multiple_files=False, key="artifact_upload"
             )
         with b:
             reference = st.file_uploader(
-                "Optional reference", type=None, accept_multiple_files=False, key="reference_upload"
+                "Optional reference checkpoint", type=None, accept_multiple_files=False, key="reference_upload"
             )
         from stegogate.platform_support import capabilities
 
@@ -817,9 +929,14 @@ def render_upload(storage):
 
 
 def render_demo(storage):
-    st.subheader("Prepared models & behavioral evaluation")
+    st.subheader("See a prepared model example")
+    st.write(
+        "Explore saved evidence from a controlled example. A reference checkpoint is a comparison point, "
+        "not a universally clean model. A backdoored example demonstrates a documented trigger; "
+        "it does not teach this tool to find every unknown trigger."
+    )
     st.info(
-        "This browser reads local prepared evidence only. Downloads, checkpoint conversion, and behavioral verification are explicit CLI preparation steps—not dashboard actions."
+        "This page replays bounded, locally prepared evidence, not live model inference. Downloads, checkpoint conversion, and behavioral verification are explicit CLI preparation steps—not dashboard actions."
     )
     catalog = []
     try:
@@ -1001,21 +1118,31 @@ def render_demo(storage):
 
 def main():
     with st.sidebar:
-        st.markdown("## T04-Scnr")
-        st.caption("WEIGHT FORENSICS / CPU CONSOLE")
+        st.markdown("## StegoLens")
+        st.caption("Hidden-data indicators in AI model files")
+        st.toggle("Show technical details", value=False, key="dashboard_technical")
         route = st.radio(
             "Workspace",
             ["Analysis console", "Compare reports", "Demo & evaluation", "Compatibility & scope"],
+            format_func=lambda route: {
+                "Analysis console": "Check a model",
+                "Compare reports": "Compare saved scans",
+                "Demo & evaluation": "See an example",
+                "Compatibility & scope": "What this tool can check",
+            }[route],
             label_visibility="collapsed",
         )
         st.divider()
         st.markdown("**Runtime policy**")
         st.write("CPU only · local artifacts")
         st.caption("Default scan: no network, no inference, no unsafe model loaders.")
-    st.caption("T04-SCNR  /  ARTIFACT RESEARCH CONSOLE")
-    st.title("Inspect the artifact.\nQuestion the evidence.")
+    st.caption("Hidden-data indicators in AI model files")
+    st.title("StegoLens")
+    st.markdown("**Steganographic Malware Detection in AI Model Files**")
     st.write(
-        "Inspect model structure, trace sampled weight signals, and compare independent evidence layers."
+        "Steganography means hiding data inside stored model numbers. StegoLens collects indicators "
+        "and evidence about model files—not proof of malware or safety. Check a file without running "
+        "the model, then see what was checked and what remains unknown."
     )
     try:
         from stegogate import storage
@@ -1072,20 +1199,15 @@ def main():
         render_report(report)
     else:
         st.divider()
-        st.subheader("Evidence workspace")
-        st.caption("Awaiting an explicit scan or saved-report selection. No analysis has run.")
-        table(coverage_rows({}))
-        a, b = st.columns(2, gap="large")
-        with a:
-            st.markdown("### Investigate structure & signals")
-            st.write(
-                "Search tensor metadata, inspect sampled windows, and chart recorded entropy or bit-plane fields. Unsupported layers stay visibly unavailable."
-            )
-        with b:
-            st.markdown("### Keep conclusions scoped")
-            st.write(
-                "Static findings, learned manipulation votes, reference changes and known-trigger behavior remain separate. None certifies that a model is safe."
-            )
+        st.subheader("Start with three steps")
+        st.caption("No analysis has run. Choose a file above or open a saved scan in the sidebar.")
+        st.write("**1. Choose a model file.** Add one local file, up to 256 MiB. A reference checkpoint is optional.")
+        st.write("**2. Run the check.** Click Run CPU analysis when you are ready. This inspects the file; it does not run the model.")
+        st.write("**3. Read the evidence.** See the recorded verdict, the checks that ran, and any missing coverage.")
+        st.info(
+            "This tool looks for specific indicators, not a universal safe/infected answer. "
+            "No indicators found is not a pass; missing checks and unknown triggers remain unknown."
+        )
 
 
 if __name__ == "__main__":

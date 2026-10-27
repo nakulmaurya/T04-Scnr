@@ -1,0 +1,12 @@
+StegoLens recorded visual demo
+Open SEE-THE-DEMO.html in a browser. No installation or server needed.
+Choose a sample, then toggle Add the known trigger.
+These are actual recorded CPU predictions, not browser inference or scanner risk scores.
+Epoch 1 is an earlier reference, not a separately clean-trained model.
+All 12 first canonical MNIST test samples included, without filtering.
+known-trigger-example.png is a presentation-ready example. samples.json preserves exact provenance.
+Source https://huggingface.co/authentrics/mnist-badnets-poisoned
+Reviewed demo https://github.com/Authentrics-ai/trojai-authentrics-demo
+MNIST source https://yann.lecun.com/exdb/mnist/
+Model source Apache-2.0; see upstream model repository for license/attribution.
+No model weights, credentials, or training datasets are bundled here.

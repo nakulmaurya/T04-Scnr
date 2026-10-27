@@ -95,6 +95,7 @@ def test_render_no_automatic_provider_calls(tmp_path, monkeypatch):
     monkeypatch.setattr(explanation, "_transport", lambda *a, **kw: pytest.fail("render made request"))
     app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
     app.session_state["active_report"] = sample()
+    app.session_state["dashboard_technical"] = True
     app.run(timeout=30)
     assert not app.exception
     assert len(app.tabs) == 10

@@ -546,7 +546,7 @@ def _footer(canvas, doc):
     canvas.saveState()
     canvas.setFont("Helvetica", 9)
     canvas.setFillColor(colors.HexColor("#606060"))
-    canvas.drawString(52, A4[1] - 31, "T04-SCNR  /  IMMUTABLE SCAN REPORT")
+    canvas.drawString(52, A4[1] - 31, "STEGOLENS  /  IMMUTABLE SCAN REPORT")
     canvas.drawString(52, 30, "Recorded evidence only • not a safety certification")
     canvas.drawRightString(A4[0] - 52, 30, f"Page {doc.page}")
     canvas.restoreState()
@@ -1214,8 +1214,8 @@ def build_pdf(report: dict, explanation: dict | None = None) -> bytes:
             rightMargin=52,
             topMargin=52,
             bottomMargin=52,
-            title="T04-Scnr immutable scan report",
-            author="T04-Scnr",
+            title="StegoLens immutable scan report",
+            author="StegoLens",
             subject="Recorded artifact scan evidence",
             pageCompression=1,
             invariant=1,
@@ -1250,8 +1250,8 @@ def _build_without_appendix(report, digest, reason):
             rightMargin=52,
             topMargin=52,
             bottomMargin=52,
-            title="T04-Scnr immutable scan report",
-            author="T04-Scnr",
+            title="StegoLens immutable scan report",
+            author="StegoLens",
             subject="Recorded artifact scan evidence",
             pageCompression=1,
             invariant=1,
